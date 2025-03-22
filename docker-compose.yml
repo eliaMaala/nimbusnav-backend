@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    container_name: nimbusnav-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: nimbusnav
+    ports:
+      - "5432:5432"
+
+  cassandra:
+    image: cassandra:latest
+    container_name: nimbusnav-cassandra
+    restart: always
+    ports:
+      - "9042:9042"
+
+  app:
+    build: .
+    container_name: nimbusnav-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - cassandra
